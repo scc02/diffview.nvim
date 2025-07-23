@@ -138,20 +138,9 @@ local function render_entries(panel, parent, entries, updating)
       comp:add_text((" %s"):format((entry.commit --[[@as GitCommit ]]).reflog_selector), "DiffviewReflogSelector")
     end
 
-    if entry.commit.ref_names then
-      comp:add_text((" (%s)"):format(entry.commit.ref_names), "DiffviewReference")
-    end
-
     local subject = utils.str_trunc(entry.commit.subject, 72)
-
-    if subject == "" then
-      subject = "[empty message]"
-    end
-
-    comp:add_text(
-      " " .. subject,
-      panel.cur_item[1] == entry and "DiffviewFilePanelSelected" or "DiffviewFilePanelFileName"
-    )
+    if subject == "" then subject = "[empty message]" end
+    comp:add_text(" " .. subject)
 
     if entry.commit then
       -- 3 months
@@ -161,6 +150,10 @@ local function render_entries(panel, parent, entries, updating)
           or entry.commit.rel_date
       )
       comp:add_text(" " .. entry.commit.author .. ", " .. date, "DiffviewFilePanelPath")
+    end
+
+    if entry.commit.ref_names then
+      comp:add_text((" (%s)"):format(entry.commit.ref_names), "DiffviewReference")
     end
 
     comp:ln()
